@@ -117,7 +117,10 @@
 		
 		function getCommunicationId(_conversation){
 			for (let i = 0; i < _conversation.participants.length; i++) {
-				console.log(_conversation.participants[i].peer);
+				if ( (_conversation.participants[i].purpose == 'customer') && (_conversation.participants[i].state == 'connected') && (_conversation.participants[i].direction == 'outbound') ){
+					communicationId =  _conversation.participants[i].peer;	
+					document.getElementById('communicationId').value = communicationId;
+				}				
 			}
 		}
 
