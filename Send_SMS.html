@@ -16,17 +16,9 @@
 		let conversationId = "";//urlParams.get('conversationId');
 		let communicationId = ""; // String | communicationId
 
-		//
-		// NEED TO UPDATE
-		// 		
-		//// Manually set auth token or use loginImplicitGrant(...) or loginClientCredentialsGrant(...)
-		//client.setAccessToken("<<<<TEMP_ACCESS_TOKEN>>>>");
 		
-		$(document).ready(() => {
-			// Authenticate with PureCloud
-					// Local vars
-			const urlParams = new URLSearchParams(window.location.search);
-			const clientId = urlParams.get('clientId');  //oauth clientId
+		function login() {
+			const clientId = document.getElementById('clientId').value;  //oauth clientId
 			const redirectUri = 'https://muraliganji.github.io/dev/Send_SMS.html';		
 			client.loginImplicitGrant(clientId, redirectUri, {'state': conversationId})
 			
@@ -38,7 +30,7 @@
                     console.error(err);
                     document.getElementById('number').value = 'cannot log in';
                 })
-		});
+		}
 		
 		
 		function postConversationsMessages() {
@@ -100,7 +92,9 @@
 	</script>
 </head>
 <body>
-	
+	<b>Client Id: </b><input id="clientId" type="text" label="Enter client Id to Login" /> <br/>
+	<input type="button" value="Login" onclick="login();" /><br/>
+	<br/>
 	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
 	<b>Phone Number: </b><input id="number" type="text" label="Number to send SMS" /> <br/>
 	<input type="button" value="Create Message Conversation" onclick="postConversationsMessages();" /><br/>
