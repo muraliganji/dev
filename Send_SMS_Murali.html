@@ -41,10 +41,10 @@
 		
         function sendSMS() {
             let number = document.getElementById('number').value;		
-
+			let queueId = document.getElementById('queueId').value;	
 			let body = {
-				  "queueId": "7326b21c-0b65-4631-93fb-c799146c5631",
-				  "toAddress": "6162408078",
+				  "queueId": queueId,
+				  "toAddress": number,
 				  "toAddressMessengerType": "SMS",
 				  "useExistingConversation": true,
 				  "externalContactId": ""
@@ -65,8 +65,8 @@
 	</script>
 </head>
 <body>
+	<input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
 	<input id="number" type="text" label="Number to send SMS" />
-    <input type="button" value="Dial" onclick="dial();" />
     <input type="button" value="Send SMS" onclick="sendSMS();" />
 
     <div id="additionalParties">
