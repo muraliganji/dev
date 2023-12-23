@@ -29,7 +29,7 @@
 				.catch((err) => {
                     console.error(err);
                     document.getElementById('number').value = 'cannot log in';
-					document.getElementById('errors').value = err;
+					document.getElementById('errors').value = err.message;
                 })
 		}
 		
@@ -58,7 +58,7 @@
 			.catch((err) => {
 				console.log("There was a failure calling postConversationsMessages");
 				console.error(err);
-				document.getElementById('errors').value = err;
+				document.getElementById('errors').value = err.message;
 			});			            			
         }		
 		
@@ -71,7 +71,7 @@
 			  .catch((err) => {
 				console.log("There was a failure calling getConversationsMessage");
 				console.error(err);
-				document.getElementById('errors').value = err;
+				document.getElementById('errors').value = err.message;
 			  });		
 		}
 		
@@ -82,7 +82,6 @@
 			};
 			conversationId = document.getElementById('conversationId').value;		
 			communicationId = document.getElementById('communicationId').value;	
-			alert( 'conversationId:'+conversationId+', communicationId:'+communicationId);
 			// Send message
 			apiInstance.postConversationsMessageCommunicationMessages(conversationId, communicationId, body, opts)
 			  .then((data) => {
@@ -91,7 +90,7 @@
 			  .catch((err) => {
 				console.log("There was a failure calling postConversationsMessageCommunicationMessages");
 				console.error(err);
-				document.getElementById('errors').value = err;
+				document.getElementById('errors').value = err.message;
 			  });		
 		}
 
