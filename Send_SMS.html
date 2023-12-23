@@ -13,7 +13,8 @@
 		client.setEnvironment(platformClient.PureCloudRegionHosts.us_west_2); // Genesys Cloud region
 		let apiInstance = new platformClient.ConversationsApi();
 		const conversationsApi = new platformClient.ConversationsApi();
-		let conversationId = 'state';//urlParams.get('conversationId');
+		let conversationId = "";//urlParams.get('conversationId');
+		let communicationId = ""; // String | communicationId
 
 		//
 		// NEED TO UPDATE
@@ -25,7 +26,7 @@
 			// Authenticate with PureCloud
 					// Local vars
 			const urlParams = new URLSearchParams(window.location.search);
-			const clientId = urlParams.get('clientId');
+			const clientId = urlParams.get('clientId');  //oauth clientId
 			const redirectUri = 'https://muraliganji.github.io/dev/Send_SMS.html';		
 			client.loginImplicitGrant(clientId, redirectUri, {'state': conversationId})
 			
@@ -40,13 +41,19 @@
 		});
 		
         function sendSMS() {
+			//postConversationsMessages();
+			//getConversationsMessage();
+			postConversationsMessageCommunicationMessages();
+		}
+		
+		function postConversationsMessages() {
             let number = document.getElementById('number').value;		
 			let queueId = document.getElementById('queueId').value;	
 			let body = {
 				  "queueId": queueId,
 				  "toAddress": number,
-				  "toAddressMessengerType": "SMS",
-				  "useExistingConversation": true,
+				  "toAddressMessengerType": "sms",
+				  "useExistingConversation": false,
 				  "externalContactId": ""
 				}; // Object | Create outbound messaging conversation
 
@@ -54,6 +61,11 @@
 			apiInstance.postConversationsMessages(body)
 			  .then((data) => {
 				console.log('postConversationsMessages success! data: ${JSON.stringify(data, null, 2)}');
+				conversationId = data.id;
+				document.getElementById('queueId').value = conversationId;
+				console.log('conversationId: ${JSON.stringify(conversationId, null, 2)}');
+				//get Conversation Details
+				getConversationsMessage();
 			})
 			.catch((err) => {
 				console.log("There was a failure calling postConversationsMessages");
@@ -61,13 +73,45 @@
 			});			
             			
         }		
+		
+		function getConversationsMessage() {
+			// Get message conversation
+			apiInstance.getConversationsMessage(conversationId)
+			  .then((data) => {
+				console.log('getConversationsMessage success! data: ${JSON.stringify(data, null, 2)}');
+			  })
+			  .catch((err) => {
+				console.log("There was a failure calling getConversationsMessage");
+				console.error(err);
+			  });		
+		}
+		
+		function postConversationsMessageCommunicationMessages() {
+			let body = {"textBody":document.getElementById('message').value}; // Object | Message
+			let opts = { "useNormalizedMessage": false // Boolean | If true, response removes deprecated fields (textBody, media, stickers)};
+
+			// Send message
+			apiInstance.postConversationsMessageCommunicationMessages(conversationId, communicationId, body, opts)
+			  .then((data) => {
+				console.log('postConversationsMessageCommunicationMessages success! data: ${JSON.stringify(data, null, 2)}');
+			  })
+			  .catch((err) => {
+				console.log("There was a failure calling postConversationsMessageCommunicationMessages");
+				console.error(err);
+			  });		
+		}
 
 	</script>
 </head>
 <body>
 	
-	<b>Queue ID</b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
-	<b>Phone Number</b><input id="number" type="text" label="Number to send SMS" /> <br/>
-    <input type="button" value="Send SMS" onclick="sendSMS();" />
+	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
+	<b>Phone Number: </b><input id="number" type="text" label="Number to send SMS" /> <br/>
+	<input type="button" value="Create Message Conversation" onclick="postConversationsMessages();" /><br/>
+	<br/>
+	<b>Coversation Id: </b><input id="conversationId" type="text" label="Conversation Id"/><br/>
+	<b>Communication Id: </b><input id="communicationId" type="text" label="CommunicationId Id"/><br/>
+    <b>Message Body: </b><input id="message" type="text" label="Message" /> <br/>
+    <input type="button" value="Send SMS" onclick="postConversationsMessageCommunicationMessages();" />
 </body>
 </html>
