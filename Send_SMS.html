@@ -15,6 +15,7 @@
 		//const conversationsApi = new platformClient.ConversationsApi();
 		let conversationId = "";//urlParams.get('conversationId');
 		let communicationId = ""; // String | communicationId
+		let conversation;
 
 		
 		function login() {
@@ -29,7 +30,7 @@
 				.catch((err) => {
                     console.error(err);
                     document.getElementById('number').value = 'cannot log in';
-					document.getElementById('errors').value = err.message;
+					document.getElementById('errors').value = err.message.toString();
                 })
 		}
 		
@@ -58,7 +59,7 @@
 			.catch((err) => {
 				console.log("There was a failure calling postConversationsMessages");
 				console.error(err);
-				document.getElementById('errors').value = err.message;
+				document.getElementById('errors').value = err.message.toString();
 			});			            			
         }		
 		
@@ -66,12 +67,13 @@
 			// Get message conversation
 			apiInstance.getConversationsMessage(conversationId)
 			  .then((data) => {
+				conversation = data;
 				console.log('getConversationsMessage success! data: ${JSON.stringify(data, null, 2)}');
 			  })
 			  .catch((err) => {
 				console.log("There was a failure calling getConversationsMessage");
 				console.error(err);
-				document.getElementById('errors').value = err.message;
+				document.getElementById('errors').value = err.message.toString();
 			  });		
 		}
 		
@@ -90,7 +92,7 @@
 			  .catch((err) => {
 				console.log("There was a failure calling postConversationsMessageCommunicationMessages");
 				console.error(err);
-				document.getElementById('errors').value = err.message;
+				document.getElementById('errors').value = err.message.toString();
 			  });		
 		}
 
@@ -104,6 +106,7 @@
 	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
 	<b>Phone Number: </b><input id="number" type="text" label="Number to send SMS" /> <br/>
 	<input type="button" value="Create Message Conversation" onclick="postConversationsMessages();" /><br/>
+	<br/><input type="button" value="Get Message Conversation" onclick="getConversationsMessage();" /><br/>
 	<br/>
 	<b>Coversation Id: </b><input id="conversationId" type="text" label="Conversation Id"/><br/>
 	<b>Communication Id: </b><input id="communicationId" type="text" label="CommunicationId Id"/><br/>
@@ -111,6 +114,6 @@
     <input type="button" value="Send SMS" onclick="postConversationsMessageCommunicationMessages();" />
 	<br/>
 	<br/>
-	<b>Errors: </b><input id="errors" type="textarea" label="errors" /> <br/>
+	<b>Errors: </b><textarea id="errors" name="errors" rows="4" cols="50"><br/>
 </body>
 </html>
