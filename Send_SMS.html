@@ -75,6 +75,7 @@
 				apiInstance.getConversationsMessage(conversationId)
 				  .then((data) => {
 					conversation = data;
+					getCommunicationId(conversation);
 					console.log('getConversationsMessage success! data: ${JSON.stringify(data, null, 2)}');
 				  })
 				  .catch((err) => {
@@ -113,6 +114,12 @@
 			if (_val && (_val != 'undefined')) return true;
 			else alert("Please enter valid "+_field);
 		}
+		
+		function getCommunicationId(_conversation){
+			for (let i = 0; i < _conversation.participants.length; i++) {
+				console.log(_conversation.participants[i].peer);
+			}
+		}
 
 
 	</script>
@@ -123,10 +130,10 @@
 	<br/>
 	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
 	<b>Phone Number: </b><input id="number" type="text" label="Number to send SMS" /> <br/>
-	<input type="button" value="Create Message Conversation" onclick="postConversationsMessages();" /><br/>
+	<input type="button" value="Create Conversations for Message" onclick="postConversationsMessages();" /><br/>
 	<br/>
 	<b>Coversation Id: </b><input id="conversationId" type="text" label="Conversation Id"/><br/>
-	<input type="button" value="Get Message Conversation" onclick="getConversationsMessage();" /><br/>
+	<input type="button" value="Get Conversation for Message" onclick="getConversationsMessage();" /><br/>
 	<br/>
 	<b>Communication Id: </b><input id="communicationId" type="text" label="CommunicationId Id"/><br/>
     <b>Message Body: </b><input id="message" type="text" label="Message" /> <br/>
