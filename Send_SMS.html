@@ -54,7 +54,7 @@
 				  .then((data) => {
 					console.log('postConversationsMessages success! data: ${JSON.stringify(data, null, 2)}');
 					conversationId = data.id;
-					document.getElementById('queueId').value = conversationId;
+					document.getElementById('conversationId').value = conversationId;
 					console.log('conversationId: ${JSON.stringify(conversationId, null, 2)}');
 				})
 				.catch((err) => {
