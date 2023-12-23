@@ -74,11 +74,11 @@
 		
 		function postConversationsMessageCommunicationMessages() {
 			let body = { "textBody": "testing second message"}; // Object | Message
-			let opts = { 
+			/*let opts = { 
 			  "useNormalizedMessage": false // Boolean | If true, response removes deprecated fields (textBody, media, stickers)
-			};
+			};*/
 			// Send message
-			apiInstance.postConversationsMessageCommunicationMessages(conversationId, communicationId, body, opts)
+			apiInstance.postConversationsMessageCommunicationMessages(conversationId, communicationId, body, {})
 			  .then((data) => {
 				console.log('postConversationsMessageCommunicationMessages success! data: ${JSON.stringify(data, null, 2)}');
 			  })
