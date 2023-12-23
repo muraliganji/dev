@@ -12,7 +12,7 @@
 		const client = platformClient.ApiClient.instance;
 		client.setEnvironment(platformClient.PureCloudRegionHosts.us_west_2); // Genesys Cloud region
 		let apiInstance = new platformClient.ConversationsApi();
-		const conversationsApi = new platformClient.ConversationsApi();
+		//const conversationsApi = new platformClient.ConversationsApi();
 		let conversationId = "";//urlParams.get('conversationId');
 		let communicationId = ""; // String | communicationId
 
@@ -40,11 +40,6 @@
                 })
 		});
 		
-        function sendSMS() {
-			//postConversationsMessages();
-			//getConversationsMessage();
-			postConversationsMessageCommunicationMessages();
-		}
 		
 		function postConversationsMessages() {
             let number = document.getElementById('number').value;		
@@ -70,8 +65,7 @@
 			.catch((err) => {
 				console.log("There was a failure calling postConversationsMessages");
 				console.error(err);
-			});			
-            			
+			});			            			
         }		
 		
 		function getConversationsMessage() {
@@ -88,9 +82,9 @@
 		
 		function postConversationsMessageCommunicationMessages() {
 			let body = {"textBody":document.getElementById('message').value}; // Object | Message
-			let opts = { "useNormalizedMessage": false // Boolean | If true, response removes deprecated fields (textBody, media, stickers)};
-
-			// Send message
+			let opts = { "useNormalizedMessage": false // Boolean | If true, response removes deprecated fields (textBody, media, stickers)
+						};
+				// Send message
 			apiInstance.postConversationsMessageCommunicationMessages(conversationId, communicationId, body, opts)
 			  .then((data) => {
 				console.log('postConversationsMessageCommunicationMessages success! data: ${JSON.stringify(data, null, 2)}');
@@ -100,6 +94,7 @@
 				console.error(err);
 			  });		
 		}
+
 
 	</script>
 </head>
