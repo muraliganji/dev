@@ -56,8 +56,6 @@
 					conversationId = data.id;
 					document.getElementById('queueId').value = conversationId;
 					console.log('conversationId: ${JSON.stringify(conversationId, null, 2)}');
-					//get Conversation Details
-					getConversationsMessage();
 				})
 				.catch((err) => {
 					console.log("There was a failure calling postConversationsMessages");
