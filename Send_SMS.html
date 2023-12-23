@@ -29,6 +29,7 @@
 				.catch((err) => {
                     console.error(err);
                     document.getElementById('number').value = 'cannot log in';
+					document.getElementById('errors').value = err;
                 })
 		}
 		
@@ -57,6 +58,7 @@
 			.catch((err) => {
 				console.log("There was a failure calling postConversationsMessages");
 				console.error(err);
+				document.getElementById('errors').value = err;
 			});			            			
         }		
 		
@@ -69,11 +71,12 @@
 			  .catch((err) => {
 				console.log("There was a failure calling getConversationsMessage");
 				console.error(err);
+				document.getElementById('errors').value = err;
 			  });		
 		}
 		
 		function postConversationsMessageCommunicationMessages() {
-			let body = { "textBody": "testing second message"}; // Object | Message
+			let body = { "textBody": document.getElementById('message').value}; // Object | Message
 			let opts = { 
 			  "useNormalizedMessage": false // Boolean | If true, response removes deprecated fields (textBody, media, stickers)
 			};
@@ -88,6 +91,7 @@
 			  .catch((err) => {
 				console.log("There was a failure calling postConversationsMessageCommunicationMessages");
 				console.error(err);
+				document.getElementById('errors').value = err;
 			  });		
 		}
 
@@ -106,5 +110,8 @@
 	<b>Communication Id: </b><input id="communicationId" type="text" label="CommunicationId Id"/><br/>
     <b>Message Body: </b><input id="message" type="text" label="Message" /> <br/>
     <input type="button" value="Send SMS" onclick="postConversationsMessageCommunicationMessages();" />
+	<br/>
+	<br/>
+	<b>Errors: </b><input id="errors" type="textarea" label="errors" /> <br/>
 </body>
 </html>
