@@ -65,6 +65,7 @@
 		
 		function getConversationsMessage() {
 			// Get message conversation
+			conversationId = document.getElementById('conversationId').value;	
 			apiInstance.getConversationsMessage(conversationId)
 			  .then((data) => {
 				conversation = data;
@@ -114,6 +115,6 @@
     <input type="button" value="Send SMS" onclick="postConversationsMessageCommunicationMessages();" />
 	<br/>
 	<br/>
-	<b>Errors: </b><textarea id="errors" name="errors" rows="4" cols="50"><br/>
+	<b>Errors: </b><textarea id="errors" name="errors" rows="4" cols="50"> </textarea><br/>
 </body>
 </html>
