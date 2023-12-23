@@ -26,8 +26,7 @@
 					// Local vars
 			const urlParams = new URLSearchParams(window.location.search);
 			const clientId = urlParams.get('clientId');
-			alert(clientId);
-			const redirectUri = 'http://localhost:4200/Send_SMS_Murali.html';		
+			const redirectUri = 'https://muraliganji.github.io/dev/Send_SMS_Murali.html';		
 			client.loginImplicitGrant(clientId, redirectUri, {'state': conversationId})
 			
 				.then((data) => {
