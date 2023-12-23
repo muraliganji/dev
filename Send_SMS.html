@@ -20,7 +20,7 @@
 		// NEED TO UPDATE
 		// 		
 		//// Manually set auth token or use loginImplicitGrant(...) or loginClientCredentialsGrant(...)
-		//client.setAccessToken("jl-ocN6SVXO2ofs4VEC7CPAWZgJvr4mPB3AplRs_mrlGJj1GG8rVoU3TeYSDnZ9u2Vl94lfqDS0J4bbhadyJuA");
+		//client.setAccessToken("<<<<TEMP_ACCESS_TOKEN>>>>");
 		
 		$(document).ready(() => {
 			// Authenticate with PureCloud
@@ -48,7 +48,7 @@
 				  "queueId": queueId,
 				  "toAddress": number,
 				  "toAddressMessengerType": "sms",
-				  "useExistingConversation": false,
+				  "useExistingConversation": true,
 				  "externalContactId": ""
 				}; // Object | Create outbound messaging conversation
 
