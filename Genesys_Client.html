@@ -27,6 +27,7 @@
 				.then((data) => {
 					console.log('Logged in with state: ' + JSON.stringify(data));
                     conversationId = data.state;
+					getMyQueues();
 				})
 				.catch((err) => {
                     console.error(err);
@@ -65,7 +66,7 @@
 		function postConversationsMessages() {
 			resetErrorDisplay();
             let number = document.getElementById('number').value;		
-			let queueId = document.getElementById('queueId').value;	
+			let queueId = $("#myQueues").val(); // document.getElementById('queueId').value;	
 			let body = {
 				  "queueId": queueId,
 				  "toAddress": number,
@@ -151,7 +152,7 @@
 		
 		function createProxyInteraction() {
 			resetErrorDisplay();
-            let queueId = document.getElementById('queueId').value;	
+            let queueId = $("#myQueues").val(); // let queueId = document.getElementById('queueId').value;	
 			let body = {
 				  "queueId": queueId,
 				  "provider": "test"
@@ -182,9 +183,9 @@
 	<b>Client Id: </b><input id="clientId" type="text" label="Enter client Id to Login" /> <br/>
 	<input type="button" value="Login" onclick="login();" /><br/>
 	<br/>
-	<input type="button" value="Get My Queues" onclick="getMyQueues();" /><br/>	
-	<select id="myQueues"></select><br/>	
-	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
+	<b>Select a Queue:</b><select id="myQueues"></select><br/>	
+	<!--input type="button" value="Get My Queues" onclick="getMyQueues();" /><br/>	
+	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/-->
 	<hr/>
 	<input type="button" value="Create Proxy Interaction" onclick="createProxyInteraction();" /><br/>	
 	<hr/>
