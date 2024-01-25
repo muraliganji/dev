@@ -37,7 +37,7 @@
 		}
 		
 		
-		function getAssignedQueues() {
+		function getMyQueues() {
 			const opts = { 
 				"pageSize": 25, // Number | Page size [max value is 100]
 				"pageNumber": 1, // Number | Page number [max value is 5]
@@ -45,10 +45,15 @@
 				"sortOrder": "asc", // String | Sort order
 				//"name": queueName, // String | Name
 			};
+			
 			routingApi.getRoutingQueuesMe(opts)
 			  .then((data) => {
-				console.log('getRoutingQueuesMe success! data: ${JSON.stringify(data, null, 2)}');	
 				console.log('Queues: ' + JSON.stringify(data));				
+				var $myQueues = $('#myQueues');
+				for (let i = 0; i < data.entities.length; i++) {
+					var $option = $("<option/>", {value: data.entities[i].id,text: data.entities[i].name});
+					$myQueues.append($option);
+				}								
 			})
 			.catch((err) => {
 				console.log("There was a failure calling getRoutingQueuesMe");
@@ -177,7 +182,8 @@
 	<b>Client Id: </b><input id="clientId" type="text" label="Enter client Id to Login" /> <br/>
 	<input type="button" value="Login" onclick="login();" /><br/>
 	<br/>
-	<input type="button" value="Get Queues" onclick="getAssignedQueues();" /><br/>	
+	<input type="button" value="Get My Queues" onclick="getMyQueues();" /><br/>	
+	<select id="myQueues"></select><br/>	
 	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
 	<hr/>
 	<input type="button" value="Create Proxy Interaction" onclick="createProxyInteraction();" /><br/>	
