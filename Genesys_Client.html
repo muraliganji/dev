@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Innovation Lab - Sandbox</title>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
+
+	<script type="text/javascript">
+
+		const platformClient = require("platformClient");
+		const client = platformClient.ApiClient.instance;
+		client.setEnvironment(platformClient.PureCloudRegionHosts.us_west_2); // Genesys Cloud region
+		let apiInstance = new platformClient.ConversationsApi();
+		let conversationId = "";
+		let communicationId = "";
+		let conversation;
+
+		
+		function login() {
+			resetErrorDisplay();
+			const clientId = document.getElementById('clientId').value;  //oauth clientId
+			const redirectUri = 'https://muraliganji.github.io/dev/Genesys_Client.html';		
+			if (isNotEmpty('Client Id', clientId)) {
+				client.loginImplicitGrant(clientId, redirectUri, {'state': conversationId})			
+				.then((data) => {
+					console.log('Logged in with state: ' + JSON.stringify(data));
+                    conversationId = data.state;
+				})
+				.catch((err) => {
+                    console.error(err);
+                    document.getElementById('number').value = 'cannot log in';
+					document.getElementById('errors').value = err.message.toString();
+                })
+			} 
+		}
+		
+		
+		function postConversationsMessages() {
+			resetErrorDisplay();
+            let number = document.getElementById('number').value;		
+			let queueId = document.getElementById('queueId').value;	
+			let body = {
+				  "queueId": queueId,
+				  "toAddress": number,
+				  "toAddressMessengerType": "sms",
+				  "useExistingConversation": true,
+				  "externalContactId": ""
+				}; // Object | Create outbound messaging conversation
+
+			if (isNotEmpty('Phone Number', number)) {
+				// Create an outbound messaging conversation.
+				apiInstance.postConversationsMessages(body)
+				  .then((data) => {
+					console.log('postConversationsMessages success! data: ${JSON.stringify(data, null, 2)}');
+					conversationId = data.id;
+					document.getElementById('conversationId').value = conversationId;
+					console.log('conversationId: ${JSON.stringify(conversationId, null, 2)}');
+				})
+				.catch((err) => {
+					console.log("There was a failure calling postConversationsMessages");
+					console.error(err);
+					document.getElementById('errors').value = err.message.toString();
+				});			            			
+			}//if
+        }		
+		
+		function getConversationsMessage() {
+			resetErrorDisplay();
+			// Get message conversation
+			conversationId = document.getElementById('conversationId').value;	
+			if (isNotEmpty('Conversation Id', conversationId)) {
+				apiInstance.getConversationsMessage(conversationId)
+				  .then((data) => {
+					conversation = data;
+					getCommunicationId(conversation);
+					console.log('getConversationsMessage success! data: ${JSON.stringify(data, null, 2)}');
+				  })
+				  .catch((err) => {
+					console.log("There was a failure calling getConversationsMessage");
+					console.error(err);
+					document.getElementById('errors').value = err.message.toString();
+				  });	
+			} 			  
+		}
+		
+		function postConversationsMessageCommunicationMessages() {
+			resetErrorDisplay();
+			conversationId = document.getElementById('conversationId').value;		
+			communicationId = document.getElementById('communicationId').value;	
+			let message = document.getElementById('message').value;
+			
+			if (isNotEmpty('Conversation Id', conversationId) && isNotEmpty('Communication Id', communicationId) && isNotEmpty('Message', message)) {
+				// Send message
+				apiInstance.postConversationsMessageCommunicationMessages(conversationId, communicationId, {"textBody":message}, {"useNormalizedMessage":false} )
+				  .then((data) => {
+					console.log('postConversationsMessageCommunicationMessages success! data: ${JSON.stringify(data, null, 2)}');
+				  })
+				  .catch((err) => {
+					console.log("There was a failure calling postConversationsMessageCommunicationMessages");
+					console.error(err);
+					document.getElementById('errors').value = err.message.toString();
+				  });		
+			}
+		}
+		
+		function resetErrorDisplay() {
+			document.getElementById('errors').value = "";
+		}
+		
+		function isNotEmpty(_field, _val){
+			if (_val && (_val != 'undefined')) return true;
+			else alert("Please enter valid "+_field);
+		}
+		
+		function getCommunicationId(_conversation){
+			for (let i = 0; i < _conversation.participants.length; i++) {
+				if ( (_conversation.participants[i].purpose == 'customer') && (_conversation.participants[i].state == 'connected') && (_conversation.participants[i].direction == 'outbound') ){
+					communicationId =  _conversation.participants[i].peer;	
+					document.getElementById('communicationId').value = communicationId;
+				}				
+			}
+		}
+		
+		
+		function createProxyInteraction() {
+			resetErrorDisplay();
+            let queueId = document.getElementById('queueId').value;	
+			let body = {
+				  "queueId": queueId,
+				  "provider": "test"
+				}; // Object | Create outbound messaging conversation
+
+			if (isNotEmpty('Phone Number', number)) {
+				// Create an outbound messaging conversation.
+				apiInstance.postConversationsEmails(body)
+				  .then((data) => {
+					console.log('postConversationsEmails success! data: ${JSON.stringify(data, null, 2)}');
+					conversationId = data.id;
+					document.getElementById('conversationId').value = conversationId;
+					console.log('conversationId: ${JSON.stringify(conversationId, null, 2)}');
+				})
+				.catch((err) => {
+					console.log("There was a failure calling postConversationsEmails");
+					console.error(err);
+					document.getElementById('errors').value = err.message.toString();
+				});			            			
+			}//if
+        }			
+				
+
+
+	</script>
+</head>
+<body>
+	<b>Client Id: </b><input id="clientId" type="text" label="Enter client Id to Login" /> <br/>
+	<input type="button" value="Login" onclick="login();" /><br/>
+	<br/>
+	<b>Queue Id: </b><input id="queueId" type="text" label="Queue ID" value="7326b21c-0b65-4631-93fb-c799146c5631"/><br/>
+	<hr/>
+	<input type="button" value="Create Proxy Interaction" onclick="createProxyInteraction();" /><br/>	
+	<hr/>
+	<b>Phone Number: </b><input id="number" type="text" label="Number to send SMS" /> <br/>
+	<input type="button" value="Create Conversations for Message" onclick="postConversationsMessages();" /><br/>
+	<br/>
+	<b>Coversation Id: </b><input id="conversationId" type="text" label="Conversation Id"/><br/>
+	<input type="button" value="Get Conversation for Message" onclick="getConversationsMessage();" /><br/>
+	<br/>
+	<b>Communication Id: </b><input id="communicationId" type="text" label="CommunicationId Id"/><br/>
+    <b>Message Body: </b><input id="message" type="text" label="Message" /> <br/>
+    <input type="button" value="Send SMS" onclick="postConversationsMessageCommunicationMessages();" /><br/>
+	<br/>
+	<br/>
+	<br/>
+	<textarea id="errors" name="errors" rows="4" cols="50" style="background-color: yellow;color:#f00; border:0px"> </textarea><br/>
+</body>
+</html>
